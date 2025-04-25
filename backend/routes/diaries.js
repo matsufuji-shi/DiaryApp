@@ -61,38 +61,26 @@ router.post('/', (req, res) => {
 });
 
 // 特定のタスクを更新 (PUT /diaries/:id)
+
 router.put("/:id", (req, res) => {
-  const { date, title, content } = req.body;
+  const { date, title, content } = req.body; 
   const { id } = req.params;
 
   if (!date|| !title|| !content) {
     return res.status(400).send("入力日/タイトル/内容の入力が必要です");
   }
 
-  // まずは元の created_at を取得
-  const getSql = "SELECT created_at FROM diaries WHERE id = ?";
-  db.query(getSql, [id], (err, results) => {
+  const sql = `
+  UPDATE diaries
+  SET date = ?, title = ?, content = ?
+  WHERE id = ?
+`;
+  db.query(sql, [date, title, content, id], (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).send("データ取得に失敗しました");
+      return res.status(500).send("タスクの更新に失敗しました");
     }
-
-    if (results.length === 0) {
-      return res.status(404).send("指定された日記が見つかりません");
-    }
-
-    const updateSql = `
-      UPDATE diaries
-      SET date = ?, title = ?, content = ?
-      WHERE id = ?
-    `;
-    db.query(updateSql, [date, title, content, id], (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send("日記の更新に失敗しました");
-      }
-      res.status(200).json({ message: "日記を更新しました" });
-    });
+    res.send("タスクを更新しました");
   });
 });
 
