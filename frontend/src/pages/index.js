@@ -7,12 +7,12 @@ export default function Homes() {
   const [lists, setLists] = useState([]);
 
   useEffect(() => {
-    fetch('/api/axiosInstance')
+    fetch('http://localhost:3001/api/diaries')
       .then(res => res.json())
       .then(data => setLists(data))
       .catch(err => console.error('データ取得エラー:', err));
   }, []);
-
+console.log(lists)
   return (
     <>
      <Head>
