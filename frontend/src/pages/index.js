@@ -1,22 +1,18 @@
 // 一覧表示
 import Head from 'next/head';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-export async function getStaticProps() {
-  // ダミーのブログデータを取得（実際にはAPIやデータベースから取得）
-  const lists = [
-    {id:1 ,title:"今日の記憶" , exp:"内容1"},
-    {id:2 ,title:"今日の思い出" , exp:"内容2"}
-  ]
+export default function Homes() {
+  const [lists, setLists] = useState([]);
 
-  return {
-    props: {
-      lists,
-    },
-  };
-}
+  useEffect(() => {
+    fetch('/api/axiosInstance')
+      .then(res => res.json())
+      .then(data => setLists(data))
+      .catch(err => console.error('データ取得エラー:', err));
+  }, []);
 
-export default function DiaryList({ lists }) {
   return (
     <>
      <Head>
@@ -38,4 +34,9 @@ export default function DiaryList({ lists }) {
       </ul>
     </>
   );
+
 }
+
+// export default function DiaryList({ lists }) {
+  
+// }
