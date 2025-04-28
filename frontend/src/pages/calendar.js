@@ -36,7 +36,7 @@ const DiaryCalendar = ({ diaries }) => {
   };
 
   return (
-    <div>
+    <div className='calendar'>
       <h2>日記カレンダー</h2>
       <Calendar tileClassName={tileClassName} />
     </div>
