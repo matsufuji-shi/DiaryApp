@@ -28,7 +28,7 @@ export default function DiaryDetail(){
         <div>
           <h2>{lists.title}-{lists.date}</h2>
           <p>{lists.content}</p>
-    <Link href={`/DiaryForm`}><button>編集</button></Link>
+    <Link href={`/customers/${id}`}><button>編集</button></Link>
     </div>
     </>
       ) : (

@@ -21,7 +21,7 @@ console.log(lists)
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <h1>日記一覧</h1>
-      <Link href={'/DiaryForm'}><button>新規作成</button></Link>
+      <Link href={'/customers/new'}><button>新規作成</button></Link>
       <ul>
         {lists.map((post) => (
           <li key={post.id}>

@@ -16,7 +16,7 @@ const getDiaries = (req, res) => {
 // 新しいタスクを追加する
 const addDiaries = (req, res) => {
     const { date, title, content } = req.body;
-    const sqlInsert = "INSERT INTO diaries ( date, title, content ) VALUES (?, ?, ?, ?, ?)";
+    const sqlInsert = "INSERT INTO diaries ( date, title, content ) VALUES (?, ?, ?)";
     db.query(sqlInsert, [date, title, content], (err, result) => {
         if (err) {
             console.error(err);
