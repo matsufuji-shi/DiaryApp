@@ -48,15 +48,17 @@ export default function CustomerForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='form'>
       <h1>{isEditing ? '日記編集' : '日記作成'}</h1>
+      <div className='addList'>
+        <p>タイトル</p>
       <input
         name="title"
         value={form.title}
         onChange={handleChange}
         placeholder="日記のタイトルを入力してください"
       />
-      <br/>
+      <p>内容</p>
       <textarea
         name="content"
         value={form.content}
@@ -64,8 +66,11 @@ export default function CustomerForm() {
         placeholder="日記の内容を入力してください"
       />
       <br/>
-      <button type="submit">{isEditing ? '更新' : '追加'}</button>
+      <button type="submit" className='addBtn'>{isEditing ? '更新' : '作成'}</button>
       {error.global && <p style={{ color: 'red' }}>{error.global}</p>}
+
+      </div>
+      
     </form>
   );
 }

@@ -63,10 +63,10 @@ export default function DiaryDetail() {
           
           {/* 削除確認ダイアログ */}
           {confirmDelete && (
-            <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+            <div className='deleteLog'>
               <p>本当に削除しますか？</p>
-              <button onClick={handleDelete}>削除</button>
-              <button onClick={handleCancelDelete}>キャンセル</button>
+              <button onClick={handleDelete} className='deleteBtn3'>削除</button>
+              <button onClick={handleCancelDelete} className='cancelBtn'>キャンセル</button>
             </div>
           )}
         </>

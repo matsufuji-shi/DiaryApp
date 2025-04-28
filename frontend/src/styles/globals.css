@@ -46,7 +46,7 @@ a {
   color: #000 !important;
   }
 
-.home,.calendar,.idPage{
+.home,.calendar,.idPage,.form{
   text-align: center;
   background-color: rgb(239, 233, 233);
   padding: 0px 0px 20px 0px;
@@ -154,4 +154,75 @@ li {
 .title,.content{
   margin: 10px;
   text-align: left;
+}
+
+.addList{
+  border: 0px black solid;
+  border-radius: 10px;
+  width: 50%;
+  margin: 10px auto;
+  padding: 10px;
+  background-color:white;
+  text-align: left;
+}
+.addList input{
+  width: 100%;
+  padding: 10px;
+  border: 1px rgb(212, 212, 212) solid;
+  border-radius: 5px;
+}
+
+.addList textarea{
+  width: 100%;
+  padding:10px 10px 100px 10px;
+  border: 1px rgb(212, 212, 212) solid;
+  border-radius: 5px;
+}
+
+.addList p{
+  margin: 15px 0px 5px 0px;
+}
+
+.addBtn{
+  width: 100%;
+    border: 0px black solid;
+    border-radius: 7px;
+    padding: 10px 0px;
+    color: white;
+    background-color: #00b300;
+    font-size: 16px;
+    margin: 10px 0px;
+}
+
+.deleteLog{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 142);
+  padding: 20px;
+  border: 1px rgb(216, 216, 216) solid;
+  border-radius: 10px;
+}
+
+.deleteBtn3{
+  background-color: red;
+  border: 0px black solid;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  width: 47%;
+  margin: 2px;
+}
+
+.cancelBtn{
+  background-color: rgb(0, 204, 10);
+  border: 0px black solid;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  width: 48%;
+  margin: 2px;
 }
