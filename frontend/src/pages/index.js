@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 export default function Homes() {
   const [lists, setLists] = useState([]);
   const [error, setError] = useState(null);  // エラーメッセージ用のステートを追加
+  const [confirmDelete, setConfirmDelete] = useState(null);  // 削除確認用ステート
 
   useEffect(() => {
     fetch('http://localhost:3001/api/diaries')
@@ -16,25 +17,41 @@ export default function Homes() {
 
   const router = useRouter();
 
-  const handleDelete = async (id) => {  // idを引数として受け取るように変更
-    const url = `http://localhost:3001/api/diaries/${id}`;
-  
+  // 削除確認のための関数
+  const handleConfirmDelete = (id) => {
+    setConfirmDelete(id);  // 削除確認ダイアログを表示
+  };
+
+  // 削除の実行
+  const handleDelete = async () => {
+    if (confirmDelete === null) return;  // 削除対象がない場合は何もしない
+
+    const url = `http://localhost:3001/api/diaries/${confirmDelete}`;
+
     try {
       const res = await fetch(url, {
         method: 'DELETE',
       });
-  
+
       if (res.ok) {
-        setLists(lists.filter(post => post.id !== id));  // 削除後、リストを更新
-        router.push('/'); // 削除成功したらトップへ
+        setLists(lists.filter(post => post.id !== confirmDelete)); // リストから削除
+        setConfirmDelete(null); // 削除確認のリセット
+        router.push('/');  // ホームに遷移
       } else {
         const err = await res.json();
         setError({ global: err.message });
+        setConfirmDelete(null); // エラー時も確認をリセット
       }
     } catch (err) {
       console.error(err);
       setError({ global: 'サーバーエラーが発生しました' });
+      setConfirmDelete(null); // エラー時も確認をリセット
     }
+  };
+
+  // 削除をキャンセル
+  const handleCancelDelete = () => {
+    setConfirmDelete(null);  // 削除確認のリセット
   };
 
   return (
@@ -56,11 +73,20 @@ export default function Homes() {
             <div>
               <p>{post.title} - {post.date}</p>
               <Link href={`/lists/${post.id}`}><button>詳細</button></Link>
-              <button onClick={() => handleDelete(post.id)}>削除</button> {/* idを渡す */}
+              <button onClick={() => handleConfirmDelete(post.id)}>削除</button> {/* idを渡す */}
             </div>
           </li>
         ))}
       </ul>
+
+      {/* 削除確認ダイアログ */}
+      {confirmDelete && (
+        <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+          <p>本当に削除しますか？</p>
+          <button onClick={handleDelete}>削除</button>
+          <button onClick={handleCancelDelete}>キャンセル</button>
+        </div>
+      )}
     </>
   );
 }
