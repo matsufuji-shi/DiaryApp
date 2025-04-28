@@ -47,15 +47,18 @@ export default function DiaryDetail() {
   };
 
   return (
-    <div>
-      <h1>詳細表示</h1>
+    <div className='idPage'>
+      <h1 className='idTitle'>詳細表示</h1>
       {diary ? (
         <>
-          <div>
-            <h2>{diary.title} - {diary.date}</h2>
-            <p>{diary.content}</p>
-            <Link href={`/customers/${diary.id}`}><button>編集</button></Link>
-            <button onClick={handleConfirmDelete}>削除</button>  {/* 削除確認を呼び出す */}
+          <div className='detail'>
+            <h2 className='title'>{diary.title} - {diary.date}</h2>
+            <p className='content'>{diary.content}</p>
+
+            <div className='btns'>
+            <Link href={`/customers/${diary.id}`}><button className='editBtn2'>編集</button></Link>
+            <button onClick={handleConfirmDelete} className='deleteBtn2'>削除</button>  {/* 削除確認を呼び出す */}
+            </div>
           </div>
           
           {/* 削除確認ダイアログ */}
