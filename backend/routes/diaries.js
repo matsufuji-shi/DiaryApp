@@ -1,3 +1,8 @@
+function formatDateToJST(date) {
+  const jst = new Date(date.getTime() + (9 * 60 * 60 * 1000)); // 9時間足す
+  return jst.toISOString().split('T')[0];
+}
+
 const express = require("express");
 const router = express.Router();
 const db = require("../config/database"); 
@@ -12,7 +17,11 @@ router.get('/',  (req, res) => {
       console.error(err);
       return res.status(500).send("タスクの取得に失敗しました");
     }
-    res.json(result);
+    const formattedResult = result.map(diary => ({
+      ...diary,
+      date: formatDateToJST(diary.date) 
+    }));
+    res.json(formattedResult);
   });
 });
 
@@ -28,21 +37,28 @@ router.get("/:id", (req, res) => {
     if (result.length === 0) {
       return res.status(404).send("タスクが見つかりません");
     }
-    res.json(result[0]);
+    const diary = {
+      ...result[0],
+      date: formatDateToJST(result[0].date)
+    };
+
+    res.json(diary);
   });
 });
 
 // 新しいタスクを追加 (POST /diaries)
 router.post('/', (req, res) => {
-  const { date, title, content } = req.body;
+  const { title, content } = req.body;
 
-  if (!date|| !title|| !content) {
+  if ( !title|| !content) {
     return res.status(400).json({ message: '全ての必須項目を入力してください。' });
   }
 
+  const date = new Date();
+
   const sql = `
     INSERT INTO diaries (date, title, content)
-    VALUES (?, ?, ?)
+    VALUES ( ?,?, ?)
   `;
 
   db.query(sql, [date, title, content], (err, result) => {
@@ -53,7 +69,9 @@ router.post('/', (req, res) => {
 
     const insertedCustomer = {
       id: result.insertId,
-      date, title, content
+      date: formatDateToJST(date),
+      title,
+      content
     };
 
     res.status(201).json(insertedCustomer);
@@ -61,26 +79,42 @@ router.post('/', (req, res) => {
 });
 
 // 特定のタスクを更新 (PUT /diaries/:id)
-
 router.put("/:id", (req, res) => {
-  const { date, title, content } = req.body; 
+  const { title, content } = req.body; 
   const { id } = req.params;
 
-  if (!date|| !title|| !content) {
-    return res.status(400).send("入力日/タイトル/内容の入力が必要です");
+  if (!title || !content) {
+    return res.status(400).json({ message: "タイトル/内容の入力が必要です" });
   }
 
   const sql = `
-  UPDATE diaries
-  SET date = ?, title = ?, content = ?
-  WHERE id = ?
-`;
-  db.query(sql, [date, title, content, id], (err, result) => {
+    UPDATE diaries
+    SET title = ?, content = ?
+    WHERE id = ?
+  `;
+
+  db.query(sql, [title, content, id], (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).send("タスクの更新に失敗しました");
+      return res.status(500).json({ message: "タスクの更新に失敗しました" });
     }
-    res.send("タスクを更新しました");
+
+    // 更新後、元のdateも一緒に返したいならここで取得し直すかも
+    const getUpdatedDiarySql = `
+      SELECT id, date, title, content FROM diaries WHERE id = ?
+    `;
+
+    db.query(getUpdatedDiarySql, [id], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "更新後のデータ取得に失敗しました" });
+      }
+
+      const diary = rows[0];
+      diary.date = formatDateToJST(new Date(diary.date));
+
+      res.status(200).json(diary);
+    });
   });
 });
 
