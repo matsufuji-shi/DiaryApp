@@ -87,28 +87,34 @@ router.put("/:id", (req, res) => {
     return res.status(400).json({ message: "タイトル/内容の入力が必要です" });
   }
 
-  const date = new Date();
   const sql = `
     UPDATE diaries
-    SET date = ?, title = ?, content = ?
+    SET title = ?, content = ?
     WHERE id = ?
   `;
 
-  db.query(sql, [date, title, content, id], (err, result) => {
+  db.query(sql, [title, content, id], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: "タスクの更新に失敗しました" });
     }
 
-    // 更新後の情報を返す（ここで日付を整形！）
-    const updatedDiary = {
-      id,
-      date: formatDateToJST(date),
-      title,
-      content
-    };
+    // 更新後、元のdateも一緒に返したいならここで取得し直すかも
+    const getUpdatedDiarySql = `
+      SELECT id, date, title, content FROM diaries WHERE id = ?
+    `;
 
-    res.status(200).json(updatedDiary);
+    db.query(getUpdatedDiarySql, [id], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "更新後のデータ取得に失敗しました" });
+      }
+
+      const diary = rows[0];
+      diary.date = formatDateToJST(new Date(diary.date));
+
+      res.status(200).json(diary);
+    });
   });
 });
 
