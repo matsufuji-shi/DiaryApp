@@ -72,9 +72,13 @@ export default function Homes() {
         {lists.map((post) => (
           <li key={post.id}>
             <div>
-              <p>{post.title} - {post.date}</p>
-              <Link href={`/lists/${post.id}`}><button>詳細</button></Link>
-              <button onClick={() => handleConfirmDelete(post.id)}>削除</button> {/* idを渡す */}
+              {/* タイトルをクリック可能にする */}
+              <Link href={`/lists/${post.id}`}>
+                  <p>{post.title} - {post.date}</p>
+
+              </Link>
+              {/* 削除ボタン */}
+              <button onClick={() => handleConfirmDelete(post.id)}>削除</button>
             </div>
           </li>
         ))}
@@ -88,7 +92,7 @@ export default function Homes() {
           <button onClick={handleCancelDelete}>キャンセル</button>
         </div>
       )}
-       <DiaryCalendar diaries={lists} />
+      <DiaryCalendar diaries={lists} />
     </>
   );
 }
