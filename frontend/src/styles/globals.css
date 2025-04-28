@@ -40,3 +40,8 @@ a {
     color-scheme: dark;
   }
 }
+
+.react-calendar__tile.highlight {
+  background-color: rgb(17, 182, 53) !important;
+  color: #000 !important;
+}

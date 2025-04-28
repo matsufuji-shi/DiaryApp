@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import DiaryCalendar from './calendar';
 
 export default function Homes() {
   const [lists, setLists] = useState([]);
@@ -87,6 +88,7 @@ export default function Homes() {
           <button onClick={handleCancelDelete}>キャンセル</button>
         </div>
       )}
+       <DiaryCalendar diaries={lists} />
     </>
   );
 }
