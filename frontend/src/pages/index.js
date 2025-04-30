@@ -12,7 +12,11 @@ export default function Homes() {
   useEffect(() => {
     fetch('http://localhost:3001/api/diaries')
       .then(res => res.json())
-      .then(data => setLists(data))
+      .then(data => {
+        // 日付順に昇順でソート
+        const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+        setLists(sortedData);  // ソートされたデータをセット
+      })
       .catch(err => console.error('データ取得エラー:', err));
   }, []);
 
@@ -63,26 +67,25 @@ export default function Homes() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className='home'>
-      <h1>日記一覧</h1>
-      <Link href={'/customers/new'}><button className='pushBtn'>新規作成</button></Link>
+        <h1>日記一覧</h1>
+        <Link href={'/customers/new'}><button className='pushBtn'>新規作成</button></Link>
 
-      {/* エラーメッセージがある場合は表示 */}
-      {error && <div style={{ color: 'red' }}>{error.global}</div>}
+        {/* エラーメッセージがある場合は表示 */}
+        {error && <div style={{ color: 'red' }}>{error.global}</div>}
 
-  
-      <ul>
-        {lists.map((post) => (
-          <li key={post.id}>
-            <div className="item">
-              <Link href={`/lists/${post.id}`}>
+        <ul>
+          {lists.map((post) => (
+            <li key={post.id}>
+              <div className="item">
+                <Link href={`/lists/${post.id}`}>
                   <p>{post.title} - {post.date}</p>
-              </Link>
-              {/* 削除ボタン */}
-              <button onClick={() => handleConfirmDelete(post.id)} className='deleteBtn'>削除</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+                </Link>
+                {/* 削除ボタン */}
+                <button onClick={() => handleConfirmDelete(post.id)} className='deleteBtn'>削除</button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* 削除確認ダイアログ */}
@@ -94,7 +97,6 @@ export default function Homes() {
         </div>
       )}
       <DiaryCalendar diaries={lists} />
-  
     </>
   );
 }
