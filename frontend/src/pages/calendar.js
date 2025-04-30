@@ -26,8 +26,7 @@ const DiaryCalendar = ({ diaries }) => {
 
   const tileClassName = ({ date, view }) => {
     if (view === 'month') {
-      const dateString = formatDateToJST(date); // ← 日本時間にしてから比較！
-      
+      const dateString = formatDateToJST(date); 
       if (highlightDates.includes(dateString)) {
         return 'highlight';
       }
@@ -36,7 +35,7 @@ const DiaryCalendar = ({ diaries }) => {
   };
 
   return (
-    <div>
+    <div className='calendar'>
       <h2>日記カレンダー</h2>
       <Calendar tileClassName={tileClassName} />
     </div>
